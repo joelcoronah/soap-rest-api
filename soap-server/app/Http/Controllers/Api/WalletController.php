@@ -28,7 +28,7 @@ class WalletController extends Controller
             if (is_null($customer)) {
                 $message = __('No se ha encontrado un cliente registrado para el documento :document y el celular :mobile.', [
                     'document' => $request->document,
-                    'mobile' => $request->mobile,
+                    'phone' => $request->mobile,
                 ]);
                 throw new \Exception($message, ResponseAlias::HTTP_NOT_FOUND);
             }
@@ -52,5 +52,4 @@ class WalletController extends Controller
 
         return $this->response($this->body, $code);
     }
-
 }

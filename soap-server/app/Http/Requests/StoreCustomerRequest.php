@@ -40,14 +40,13 @@ class StoreCustomerRequest extends FormRequest
     /**
      * @return string[]
      */
-    #[ArrayShape(['document' => "string", 'name' => "string", 'email' => "string", 'mobile' => "string"])]
     public function rules(): array
     {
         return [
             'document' => 'required|string|unique:customers',
             'name' => 'required|string',
             'email' => 'required|email|unique:customers',
-            'mobile' => 'required|numeric|digits:10|unique:customers',
+            'phone' => 'required|numeric|digits:10|unique:customers',
         ];
     }
 

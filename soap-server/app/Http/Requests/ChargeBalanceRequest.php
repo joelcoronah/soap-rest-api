@@ -47,7 +47,7 @@ class ChargeBalanceRequest extends FormRequest
         return [
             'document' => 'required|string',
             'amount' => 'required|numeric',
-            'mobile' => 'required|numeric|digits:10',
+            'phone' => 'required|numeric|digits:10',
         ];
     }
 

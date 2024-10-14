@@ -46,7 +46,7 @@ class RequestPaymentRequest extends FormRequest
     {
         return [
             'document' => 'required|string',
-            'mobile' => 'required|numeric|digits:10',
+            'phone' => 'required|numeric|digits:10',
             'amount' => 'required|numeric|min:1',
         ];
     }

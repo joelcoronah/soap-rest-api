@@ -34,7 +34,7 @@ class TransactionController extends Controller
             if (is_null($customer)) {
                 $message = __('No se ha encontrado un cliente registrado para el documento :document y el celular :mobile.', [
                     'document' => $request->document,
-                    'mobile' => $request->mobile,
+                    'phone' => $request->mobile,
                 ]);
                 throw new \Exception($message, ResponseAlias::HTTP_NOT_FOUND);
             }
@@ -42,9 +42,9 @@ class TransactionController extends Controller
             $wallet = app(Wallet::class)->getWalletOfACustomer($customer);
 
             $data = [
-              ...$request->all(),
-              'type' => Transaction::INCOME,
-              'wallet_id' => $wallet->_id
+                ...$request->all(),
+                'type' => Transaction::INCOME,
+                'wallet_id' => $wallet->_id
             ];
 
             $currentBalance = $wallet->balance;
@@ -59,8 +59,8 @@ class TransactionController extends Controller
             $this->body['cod_error'] = '00';
             $this->body['success'] = true;
             $this->body['data'] = __('Saldo añadido correctamente, ahora cuenta con :amount', [
-                    'amount' => col_amount_format($balance)
-                ]);
+                'amount' => col_amount_format($balance)
+            ]);
             $code = ResponseAlias::HTTP_CREATED;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -83,7 +83,7 @@ class TransactionController extends Controller
             if (is_null($customer)) {
                 $message = __('No se ha encontrado un cliente registrado para el documento :document y el celular :mobile.', [
                     'document' => $request->document,
-                    'mobile' => $request->mobile,
+                    'phone' => $request->mobile,
                 ]);
                 throw new \Exception($message, ResponseAlias::HTTP_NOT_FOUND);
             }
@@ -143,14 +143,14 @@ class TransactionController extends Controller
                 ->where('session_id', $request->session_id)
                 ->first();
 
-            if(is_null($payment)) {
+            if (is_null($payment)) {
                 $message = __('No se ha encontrado un registro de pago con estos datos para el cliente :name', [
                     'name' => $customer->name
                 ]);
                 throw new \Exception($message, ResponseAlias::HTTP_NOT_FOUND);
             }
 
-            if($payment->approved) {
+            if ($payment->approved) {
                 $message = __('Esta petición de pago ya ha sido aprobada para el cliente :name', [
                     'name' => $customer->name
                 ]);
@@ -167,7 +167,7 @@ class TransactionController extends Controller
 
             $data = [
                 'document' => $customer->document,
-                'mobile' => $customer->mobile,
+                'phone' => $customer->mobile,
                 'amount' => $payment->amount,
                 'type' => Transaction::EGRESS,
                 'wallet_id' => $customer->wallet->_id
@@ -180,8 +180,8 @@ class TransactionController extends Controller
             $this->body['cod_error'] = '00';
             $this->body['success'] = true;
             $this->body['data'] = __('Pago procesado exitosamente, ahora cuenta con :amount', [
-                    'amount' => col_amount_format($balance)
-                ]);
+                'amount' => col_amount_format($balance)
+            ]);
             $code = ResponseAlias::HTTP_CREATED;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
