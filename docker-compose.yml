@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 services:
   mongo-db:
     image: mongo:latest
@@ -11,6 +11,8 @@ services:
       MONGO_INITDB_DATABASE: "${DB_DATABASE}"
     volumes:
       - "./db-data:/data/db"
+    networks:
+      - my-network
 
   mongo-express:
     image: mongo-express
@@ -20,6 +22,9 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: "${DB_USERNAME}"
       ME_CONFIG_MONGODB_ADMINPASSWORD: "${DB_PASSWORD}"
       ME_CONFIG_MONGODB_SERVER: mongo-db
+      ME_CONFIG_BASICAUTH: true
+    networks:
+      - my-network
 
   soap-server:
     build: "./php/"
@@ -29,11 +34,13 @@ services:
       DB_PASSWORD: "${DB_PASSWORD}"
       DB_DATABASE: "${DB_DATABASE}"
     ports:
-      - "9000"
+      - "9000:9000"
     volumes:
       - "./soap-server:/var/www/html/"
     depends_on:
       - mongo-db
+    networks:
+      - my-network
 
   nginx:
     build:
@@ -47,6 +54,26 @@ services:
       - "./soap-server:/var/www/html/"
     depends_on:
       - mongo-db
+    networks:
+      - my-network
+
+  api-bridge:
+    build:
+      context: ./bridge/
+    container_name: api-bridge
+    environment:
+      DB_USERNAME: "${DB_USERNAME}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      DB_DATABASE: "${DB_DATABASE}"
+    ports:
+      - "4002:4002"
+    depends_on:
+      - soap-server
+    networks:
+      - my-network
 
 volumes:
   db-data:
+networks:
+  my-network:
+    driver: bridge
