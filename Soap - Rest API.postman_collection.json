@@ -1,0 +1,232 @@
+{
+	"info": {
+		"_postman_id": "113bf132-1975-437e-aa3a-637ea0fb1e10",
+		"name": "Soap - Rest API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "8438903"
+	},
+	"item": [
+		{
+			"name": "Soap service",
+			"item": [
+				{
+					"name": "Client register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <customer xmlns=\"http://www.dataaccess.com/webservicesserver/\">\n      <document>2446562ww3</document>\n      <name>Joel Corona 2</name>\n      <email>test2@t2estmail.com</email>\n      <phone>4123658745</phone>\n    </customer>\n  </soap:Body>\n</soap:Envelope>\n",
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": "{{soap-url-base}}/api/customer"
+					},
+					"response": []
+				},
+				{
+					"name": "Transaction",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <transaction xmlns=\"http://www.dataaccess.com/webservicesserver/\">\n      <phone>4123658745</phone>\n      <document>2446562ww3</document>\n      <amount>100</amount>\n    </transaction>\n  </soap:Body>\n</soap:Envelope>\n",
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": "{{soap-url-base}}/api/transaction/charge-balance"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify available",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <check-balance xmlns=\"http://www.dataaccess.com/webservicesserver/\">\n      <phone>4123658745</phone>\n      <document>2446562ww3</document>\n    </check-balance>\n  </soap:Body>\n</soap:Envelope>\n",
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": "{{soap-url-base}}/api/wallet/check-balance"
+					},
+					"response": []
+				},
+				{
+					"name": "verify payment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <confirm-payment xmlns=\"http://www.dataaccess.com/webservicesserver/\">\n      <document>2446562ww3</document>\n      <token>480569</token>\n      <session_id>dirdjs4ldBy7ShsnOBZcuCi17hF5b0qJNpGsQpzU</session_id>\n    </confirm-payment>\n  </soap:Body>\n</soap:Envelope>\n",
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": "{{soap-url-base}}/api/transaction/confirm-payment"
+					},
+					"response": []
+				},
+				{
+					"name": "Payment request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <request-payment xmlns=\"http://www.dataaccess.com/webservicesserver/\">\n      <phone>4123658745</phone>\n      <document>2446562ww3</document>\n      <amount>111</amount>\n    </request-payment>\n  </soap:Body>\n</soap:Envelope>\n",
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": "{{soap-url-base}}/api/transaction/request-payment"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bridge",
+			"item": [
+				{
+					"name": "create transaction",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"document\": \"1234656\",\n    \"phone\": \"1245633587\",\n    \"amount\": \"999\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{bridge-url-base}}/api/transaction/charge-balance"
+					},
+					"response": []
+				},
+				{
+					"name": "create customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"document\": \"1234656\",\n    \"name\": \"John Doe\",\n    \"email\": \"jd@gmaail.com\",\n    \"phone\": \"1245633587\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{bridge-url-base}}/api/customer"
+					},
+					"response": []
+				},
+				{
+					"name": "verify payment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"document\": \"1234656\",\n    \"phone\": \"1245633587\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{bridge-url-base}}/api/wallet/check-balance"
+					},
+					"response": []
+				},
+				{
+					"name": "request payment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"document\": \"2446562ww3\",\n    \"phone\": \"4123658745\",\n    \"amount\": \"200\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{bridge-url-base}}/api/transaction/request-payment"
+					},
+					"response": []
+				},
+				{
+					"name": "confirm payment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"document\": \"2446562ww3\",\n    \"token\": \"480569\",\n    \"session_id\": \"dirdjs4ldBy7ShsnOBZcuCi17hF5b0qJNpGsQpzU\"\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{bridge-url-base}}/api/transaction/confirm-payment"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "soap-url-base",
+			"value": "http://localhost:4001",
+			"type": "string"
+		},
+		{
+			"key": "bridge-url-base",
+			"value": "http://localhost:4002",
+			"type": "string"
+		}
+	]
+}
