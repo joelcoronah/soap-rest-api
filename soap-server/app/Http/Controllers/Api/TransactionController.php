@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ChargeBalanceRequest;
 use App\Http\Requests\ConfirmPaymentRequest;
 use App\Http\Requests\RequestPaymentRequest;
-use App\Jobs\SendTokenNotificationJob;
 use App\Models\Customer;
 use App\Models\Payment;
 use App\Models\Transaction;
@@ -20,6 +19,10 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Illuminate\Support\Facades\Mail;
+
+use App\Mail\PaymentVerification;
+
 
 class TransactionController extends Controller
 {
@@ -98,7 +101,8 @@ class TransactionController extends Controller
                 'approved' => false
             ]);
 
-            SendTokenNotificationJob::dispatch($customer, $payment);
+
+            Mail::to($customer->email)->send(new PaymentVerification($payment));
 
             $this->body['cod_error'] = '00';
             $this->body['success'] = true;
@@ -129,10 +133,17 @@ class TransactionController extends Controller
                 throw new \Exception($message, ResponseAlias::HTTP_NOT_FOUND);
             }
 
+            $wallet = Wallet::query()
+                ->where('customer_id', $customer->_id)
+                ->first();
+
+            if (is_null($wallet)) {
+                $message = __('No registered wallet fot the customer');
+                throw new \Exception($message, ResponseAlias::HTTP_NOT_FOUND);
+            }
+
             $payment = Payment::query()
-                ->whereHas('wallet', function ($query) use ($customer) {
-                    $query->where('customer_id', $customer->_id);
-                })
+                ->where('wallet_id', $wallet->_id)
                 ->where('token', $request->token)
                 ->where('session_id', $request->session_id)
                 ->first();
