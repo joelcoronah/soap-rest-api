@@ -27,7 +27,7 @@ class CustomerController extends Controller
             Customer::query()->create($request->all());
             $this->body['cod_error'] = '00';
             $this->body['success'] = true;
-            $this->body['data'] = 'Cliente creado satisfactoriamente';
+            $this->body['data'] = 'Customer created successfully';
             $code = ResponseAlias::HTTP_CREATED;
         } catch (\Exception $e) {
             DB::rollBack();

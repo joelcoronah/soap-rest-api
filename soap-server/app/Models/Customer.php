@@ -29,7 +29,7 @@ class Customer extends Model
     {
         return Customer::query()
             ->where('document', $request->document)
-            ->where('phone', $request->mobile)
+            ->where('phone', $request->phone)
             ->first();
     }
 }

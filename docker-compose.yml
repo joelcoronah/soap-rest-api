@@ -57,21 +57,6 @@ services:
     networks:
       - my-network
 
-  api-bridge:
-    build:
-      context: ./bridge/
-    container_name: api-bridge
-    environment:
-      DB_USERNAME: "${DB_USERNAME}"
-      DB_PASSWORD: "${DB_PASSWORD}"
-      DB_DATABASE: "${DB_DATABASE}"
-    ports:
-      - "4002:4002"
-    depends_on:
-      - soap-server
-    networks:
-      - my-network
-
 volumes:
   db-data:
 networks:

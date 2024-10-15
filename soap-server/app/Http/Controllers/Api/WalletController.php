@@ -12,6 +12,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use App\Helpers\Helper;
 
 class WalletController extends Controller
 {
@@ -26,10 +27,7 @@ class WalletController extends Controller
         try {
             $customer = app(Customer::class)->getCustomer($request);
             if (is_null($customer)) {
-                $message = __('No se ha encontrado un cliente registrado para el documento :document y el celular :mobile.', [
-                    'document' => $request->document,
-                    'phone' => $request->mobile,
-                ]);
+                $message = __('No registered customer found for this document and phone.');
                 throw new \Exception($message, ResponseAlias::HTTP_NOT_FOUND);
             }
 
@@ -39,8 +37,8 @@ class WalletController extends Controller
 
             $this->body['cod_error'] = '00';
             $this->body['success'] = true;
-            $this->body['data'] = __('Su balance es de :amount', [
-                'amount' => col_amount_format($currentBalance)
+            $this->body['data'] = __('Your current balance is :amount', [
+                'amount' => Helper::col_amount_format($currentBalance)
             ]);
             $code = ResponseAlias::HTTP_OK;
         } catch (\Exception $e) {
